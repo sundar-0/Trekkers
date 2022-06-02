@@ -1,0 +1,48 @@
+[
+    {
+        "id":1,
+        "product":"Bag",
+        "image":""
+    },
+    {
+        "id":2,
+        "product":"Stick",
+        "image":""
+
+    },
+    {
+        "id":3,
+        "product":"Trouser",
+        "image":""
+    },
+    {
+        "id":3,
+        "product":"Track",
+        "image":""
+    },
+    {
+        "id":4,
+        "product":"Jacket",
+        "image":""
+    },
+    {
+        "id":5,
+        "product":"High Neck",
+        "image":""
+    },
+    {
+        "id":6,
+        "product":"Gloves",
+        "image":""
+    },
+    {
+        "id":7,
+        "product":"Snacks",
+        "image":""
+    }
+]
+
+
+
+
+
