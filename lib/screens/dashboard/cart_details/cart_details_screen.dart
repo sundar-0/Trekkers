@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:trekkers_project/controllers/cart_controller.dart';
+import 'package:trekkers_project/screens/dashboard/payment/payment_screen.dart';
 
 class CartDetailsScreen extends StatefulWidget {
   const CartDetailsScreen({ Key? key }) : super(key: key);
@@ -54,7 +55,13 @@ class _CartDetailsScreenState extends State<CartDetailsScreen> {
              children:[
              Text("Total:\tRs."+cartController.totalPrice.toString(),style: Theme.of(context).textTheme.headline5),
               SizedBox(width: 5,),
-              RaisedButton(onPressed: (){},child: Text("Buy Now"),)
+              RaisedButton(onPressed: (){
+               Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>PaymentScreen()
+                      ));
+              },child: Text("Buy Now"),)
             ],),
         )
         ])) 

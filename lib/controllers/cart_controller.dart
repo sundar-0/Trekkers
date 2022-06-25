@@ -36,10 +36,11 @@ void addToCart( String productId,String productImage,String productName,String s
             snackPosition: SnackPosition.BOTTOM,
             duration: Duration(seconds: 2),
           );
+ 
 }
 void removeCart(String productId){
   int index = cartItem.indexWhere((element) => element["product_id"] == productId);
-  if(cartItem[index]['quantity']==0){
+  if(cartItem[index]['quantity']<=1){
   cartItem.remove(cartItem[index]);
   }
   else{
