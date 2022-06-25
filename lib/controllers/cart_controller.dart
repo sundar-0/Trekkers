@@ -39,7 +39,12 @@ void addToCart( String productId,String productImage,String productName,String s
 }
 void removeCart(String productId){
   int index = cartItem.indexWhere((element) => element["product_id"] == productId);
+  if(cartItem[index]['quantity']==0){
   cartItem.remove(cartItem[index]);
+  }
+  else{
+    cartItem[index]['quantity']-=1;
+  }
   cartItem.refresh();
   Get.snackbar(
             "Product Deleted",
