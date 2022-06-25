@@ -72,6 +72,12 @@ class _PlaceScreenState extends State<PlaceScreen> {
                           children: <Widget>[
                             Text('Distance ${double.parse(distance_taken.toStringAsFixed(2))} k.m'),
                             Text("Time ${double.parse(time_taken.toStringAsFixed(2))} Hrs"),
+                             ElevatedButton(
+                              child: const Text('Choose Guide'),
+                              onPressed: () {
+                                Navigator.of(context).pushNamed('/guide');
+                              },
+                            )
                           
                           ],
                         ),
@@ -115,6 +121,7 @@ class _PlaceScreenState extends State<PlaceScreen> {
                             ),
                             ElevatedButton(
                               child: const Text('Close BottomSheet'),
+                              
                               onPressed: () => Navigator.pop(context),
                             )
                           ],
@@ -282,11 +289,15 @@ LatLng calculateLatLng(String place){
         initialCameraPosition:CameraPosition(
                   target: startLocation,
                   zoom: 14.0,
+                  tilt:50.0
                 ),
         onMapCreated:(controller) { //method called when map is created
                     setState(() {
                       mapController = controller; 
                     });
+        },
+        onTap: (latLng) {
+          print('${latLng.latitude}, ${latLng.longitude}');
         },
         markers: _markers,  
         polylines: _polylines,

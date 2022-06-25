@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
-
 import 'package:trekkers_project/constants/constants.dart';
-import 'package:trekkers_project/screens/dashboard/add/add_screen.dart';
-import 'package:trekkers_project/screens/dashboard/home/home_screen.dart';
-import 'package:trekkers_project/screens/dashboard/place/place_screen.dart';
-
-// We need satefull widget for our categories
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:trekkers_project/controllers/auth_controller.dart';
 
 class Categories extends StatefulWidget {
-  Function toggle;
-  Categories(this.toggle, {Key? key}) : super(key: key);
+  final Function toggle;
+  const Categories(this.toggle, {Key? key}) : super(key: key);
   @override
   _CategoriesState createState() => _CategoriesState();
 }
 
 class _CategoriesState extends State<Categories> {
- 
-
+  
+  String ? token;
+  final AuthController authController=Get.find();
+  var categories=[]; 
   // By default our first item will be selected
   int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      token=authController.login.value.token;
+    });
+    fetchAllCategories();
+  }   
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,18 +34,17 @@ class _CategoriesState extends State<Categories> {
       child: SizedBox(
         height: 25,
         child: ListView.builder(
-          
           scrollDirection: Axis.horizontal,
           itemCount: categories.length,
-          itemBuilder: (context, index) => buildCategory(index),
+          itemBuilder: (context, index) => buildCategory(index,categories[index]['_id'],categories[index]['category_name']),
         ),
       ),
     );
   }
-  Widget buildCategory(int index) {
+  Widget buildCategory(int index,String catId,String catName) {
     return GestureDetector(
       onTap: () {
-        widget.toggle(categories[index]);
+        widget.toggle(catName,catId);
         setState(() {
           selectedIndex = index;
         });
@@ -48,7 +55,7 @@ class _CategoriesState extends State<Categories> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              categories[index],
+              catName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: selectedIndex == index ? kTextColor : kTextLightColor,
@@ -66,6 +73,28 @@ class _CategoriesState extends State<Categories> {
     );
     
   }
+
+    
+  Future fetchAllCategories() async{
+          var header={
+            "Authorization":"Bearer $token"
+          };
+          final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/category/fetchcategory"),headers: header);
+          print(response.statusCode);
+          if (response.statusCode == 200) {
+            final data=jsonDecode(response.body.toString()); 
+            print(data);
+            print(data);  
+            final result=data["result"];
+            setState(()  {
+              categories= result;
+            });
+
+          }
+          else{
+            categories=[];
+          }
+   }
 
 }
 

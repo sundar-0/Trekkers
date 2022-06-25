@@ -1,8 +1,19 @@
+import 'dart:convert';
+
+import 'package:chewie/chewie.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:video_player/video_player.dart';
+
+import 'package:trekkers_project/constants/constants.dart';
+import 'package:trekkers_project/controllers/auth_controller.dart';
 import 'package:trekkers_project/controllers/place_controller.dart';
 import 'package:trekkers_project/controllers/post_controller.dart';
-class HomeScreen extends StatelessWidget {
+
+class HomeScreen extends StatefulWidget {
     static const String routeName = '/home';
     static Route route() {
     return MaterialPageRoute(
@@ -11,11 +22,26 @@ class HomeScreen extends StatelessWidget {
   }
   const HomeScreen({ Key? key }) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? token;
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
-      final PostController postController = Get.put(PostController());
+      final AuthController authController=Get.find();
+
       final PlaceController placeController=Get.put(PlaceController());
+      setState(() {
+      token=authController.login.value.token!;
+      }); 
     return Scaffold(
       appBar: AppBar(
       elevation: 0,
@@ -27,7 +53,9 @@ class HomeScreen extends StatelessWidget {
           child: Column(children: <Widget>[
             StorySection(),
             RecommendedPlaceSection(),
-            PostSection()
+            PostSection(token: token,),
+           
+           
           
           ],),
           
@@ -36,8 +64,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-class StorySection extends StatelessWidget {
+class StorySection extends StatefulWidget {
   const StorySection({ Key? key }) : super(key: key);
+
+  @override
+  State<StorySection> createState() => _StorySectionState();
+}
+
+class _StorySectionState extends State<StorySection> {
 
   @override
   Widget build(BuildContext context) {
@@ -178,64 +212,107 @@ class PlaceTile extends StatelessWidget {
 
 
 
-class PostSection extends StatelessWidget {
-  final PostController postController = Get.find();
-
-  PostSection({
+class PostSection extends StatefulWidget {
+  final String? token;
+  const PostSection({
     Key? key,
+    required this.token
   }) : super(key: key);
 
   @override
+  State<PostSection> createState() => _PostSectionState();
+}
+
+class _PostSectionState extends State<PostSection> {
+
+ var posts=[];
+  @override
+  void initState() {
+   fetchAllPosts();
+    super.initState();
+  }
+  // @override
+  // void didUpdateWidget(covariant PostSection oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //       fetchAllPosts();
+  // }
+  Future fetchAllPosts() async{
+  print("inside");
+  print(widget.token);
+  var header={
+    "Authorization":"Bearer ${widget.token}"
+  };
+  final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/userpost/getAllPost"),headers: header);
+  print(response.statusCode);
+   if (response.statusCode == 200) {
+    final data=jsonDecode(response.body.toString()); 
+    print(data);
+    print(data);  
+    final result=data["result"];
+    setState(()  {
+      posts= result;
+    });
+    print(posts[0]['video_url']);
+  }
+  else{
+    posts=[];
+  }
+}
+
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
+    return Container(
         child: ListView.builder(
-            itemCount: postController.posts.length,
+            itemCount: posts.length,
             physics: ClampingScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return PostTile(
                   index: index,
-                  content: postController.posts[index].content!,
-                  postImage: postController.posts[index].post_image!,
-                  userName: postController.posts[index].user_name!,
-                  userImage: postController.posts[index].user_profile_image!);
-            })));
+                  videoUrl:posts[index]['video_url']??"",
+                  content: posts[index]['post']??"",
+                  postImage: posts[index]['image_url']??"",
+                  userName: posts[index]['user']['email'].split("@")[0],
+                  userImage:posts[index]['user']['user_profile_url']);
+            }));
   }
 }
 
-class Posts extends StatelessWidget {
-  final PostController postController = Get.find();
+// class Posts extends StatelessWidget {
+//   final PostController postController = Get.find();
  
-  Posts({
-    Key? key,
-  }) : super(key: key);
+//   Posts({
+//     Key? key,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => Container(
-        child: ListView.builder(
-            itemCount: postController.posts.length,
-            physics: ClampingScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return PostTile(
-                  index: index,
-                  content: postController.posts[index].content!,
-                  postImage: postController.posts[index].post_image!,
-                  userName: postController.posts[index].user_name!,
-                  userImage: postController.posts[index].user_profile_image!);
-            })));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Obx(() => Container(
+//         child: ListView.builder(
+//             itemCount: postController.posts.length,
+//             physics: ClampingScrollPhysics(),
+//             shrinkWrap: true,
+//             itemBuilder: (context, index) {
+//               return PostTile(
+//                   index: index,
+//                   content: postController.posts[index].content!,
+//                   postImage: postController.posts[index].post_image!,
+//                   userName: postController.posts[index].user_name!,
+//                   userImage: postController.posts[index].user_profile_image!);
+//             })));
+//   }
+// }
 
 class PostTile extends StatelessWidget {
-  final PostController postController = Get.find();
-
+  // final PostController postController = Get.find();
   final int index;
-  final String userName, userImage, postImage, content;
+  List postImage;
+  List videoUrl;
+  final String userName, userImage,content;
   PostTile(
       {Key? key,
       required this.index,
+      required this.videoUrl,
       required this.userName,
       required this.userImage,
       required this.postImage,
@@ -244,65 +321,109 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.only(top: 16),
       margin: EdgeInsets.only(bottom: 16),
       child: Column(
+       mainAxisAlignment: MainAxisAlignment.start,
+       crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(6),
-            child: Image.network(
-              userImage,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Text(
-            userName,
-            style: TextStyle(
-                fontSize: 17,
-                color: Colors.black87,
-                fontWeight: FontWeight.w500),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            content,
-            style: TextStyle(color: Colors.black54),
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Obx(() => IconButton(
-                    icon: postController.posts[index].is_favorite.value
-                        ? Icon(
-                            Icons.thumb_up_alt_rounded,
-                            size: 30,
-                            color: Colors.blue,
-                          )
-                        : Icon(
-                            Icons.thumb_up_alt_outlined,
-                            size: 30,
-                            color: Colors.blue,
-                          ),
-                    onPressed: () {
-                      postController.posts[index].is_favorite.toggle();
-                    },
-                  )),
-              IconButton(
-                  onPressed: () {
-                    postController.deletePost(postController.posts[index]);
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    size: 30,
-                    color: Colors.blue,
-                  )
-                  )
+             CircleAvatar(
+             backgroundImage:NetworkImage(userImage)),
+             SizedBox(width: 5,),
+              Text(
+                userName,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500),
+              ),
             ],
           ),
+
+          SizedBox(height: 15,),
+         Text(
+            content,
+            style: TextStyle(color: Colors.black,fontSize: 16,fontFamily: 'sans-serif',fontWeight: FontWeight.w400),
+          ),
+          postImage.isNotEmpty?
+          Container(
+            height: 200,
+            child: GridView.count(  
+                  crossAxisCount: 2,  
+                  crossAxisSpacing: 4.0,  
+                  children: List.generate(postImage.length, (index) {  
+                    return Center(  
+                      child: Image.network(
+                        postImage[index],
+                        fit: BoxFit.cover,
+                      ),  
+                    );  
+                  }  
+                  )),
+          ) :Text(""), 
+          videoUrl.isNotEmpty?
+           Container(
+            height: 200,
+            child: GridView.count(  
+                  crossAxisCount: 2,  
+                  crossAxisSpacing: 4.0,  
+                  mainAxisSpacing: 8.0,  
+                  children: List.generate(videoUrl.length, (index) {  
+                    return Center(  
+                      child:  Chewie(
+                      controller: ChewieController(
+                      videoPlayerController: VideoPlayerController.network(
+                    videoUrl[index]),
+                      autoPlay: false,
+                      looping: false,
+                    ),
+                    ),  
+                    );  
+                  }  
+                  )),
+          ):Text("") ,
+          Row(
+            children: [
+              IconButton(onPressed: (){}, icon: Icon(
+                            Icons.thumb_up_alt_rounded,
+                            size: 20,
+                            color: Colors.black,
+                          )),
+            IconButton(onPressed: (){}, icon: Icon(
+                            Icons.share,
+                            size: 20,
+                            color: Colors.black,
+                          )),
+              //  IconButton(
+              //       icon: postController.posts[index].is_favorite.value
+              //           ? Icon(
+              //               Icons.thumb_up_alt_rounded,
+              //               size: 30,
+              //               color: Colors.blue,
+              //             )
+              //           : Icon(
+              //               Icons.thumb_up_alt_outlined,
+              //               size: 30,
+              //               color: Colors.blue,
+              //             ),
+              //       onPressed: () {
+              //         // postController.posts[index].is_favorite.toggle();
+              //       },
+              //     )),
+
+            ],
+          ),  
+          SizedBox(height: 5,),
+          Divider(thickness: 1,color: Colors.grey,),
         ],
       ),
     );
   }
 }
+
+ 

@@ -1,5 +1,6 @@
+export 'auth/Welcome/welcome_screen.dart';
 export 'auth/login/login_screen.dart';
-export 'auth/sign_up/sign_up_screen.dart';
+export 'auth/Signup/signup_screen.dart';
 export 'dashboard/guide/guide_screen.dart';
 export 'dashboard/dashboard.dart';
 export 'dashboard/home/home_screen.dart';
@@ -8,3 +9,6 @@ export 'dashboard/profile/profile_screen.dart';
 export 'dashboard/search_place/search_place_screen.dart';
 export 'dashboard/setting/setting_screen.dart';
 export 'dashboard/shopping/shopping_screen.dart';
+export 'dashboard/profile_account/profile_account_screen.dart';
+export 'dashboard/event/event_screen.dart';
+export 'dashboard/event/event_details_screen.dart';

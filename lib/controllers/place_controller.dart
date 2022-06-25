@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:trekkers_project/models/places.dart';
+import 'package:trekkers_project/data/models/places.dart';
+
 
 
 class PlaceController extends GetxController {

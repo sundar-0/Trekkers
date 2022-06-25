@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:trekkers_project/config/app_router.dart';
 import 'package:trekkers_project/config/theme.dart';
+import 'package:trekkers_project/screens/auth/Welcome/welcome_screen.dart';
 import 'package:trekkers_project/screens/dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(backgroundColor: Colors.white),
         ),
          onGenerateRoute: AppRouter.onGenerateRoute,
-      initialRoute: DashboardScreen.routeName,);
+      initialRoute: WelcomeScreen.routeName,);
   }
 }
 

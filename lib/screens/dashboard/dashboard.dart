@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:trekkers_project/controllers/auth_controller.dart';
 import 'package:trekkers_project/screens/dashboard/add/add_screen.dart';
+import 'package:trekkers_project/screens/dashboard/event/event_screen.dart';
 import 'package:trekkers_project/screens/screens.dart';
 
 class DashboardScreen extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/dashboard';
   static Route route() {
     return MaterialPageRoute(
         builder: (_) => DashboardScreen(), settings: RouteSettings(name: routeName));
@@ -21,6 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
   HomeScreen(),
   PlaceScreen(),
+  EventScreen(),
   AddScreen(),
   ShoppingScreen(),
   ProfileScreen(),
@@ -34,12 +38,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
   
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type : BottomNavigationBarType.fixed,
-
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -48,6 +52,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.map_rounded),
             label: 'Trip',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event),
+            label: "Event ",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_box),

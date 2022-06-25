@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:trekkers_project/models/category.dart';
+import 'package:trekkers_project/data/models/category.dart';
+
 
 class CategoryController extends GetxController {
   var categories = <CategoriesModel>[].obs;

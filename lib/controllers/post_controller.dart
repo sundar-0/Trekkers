@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:trekkers_project/models/posts.dart';
+import 'package:trekkers_project/data/models/posts.dart';
+
 
 class PostController extends GetxController {
   var posts = <PostsModel>[].obs;

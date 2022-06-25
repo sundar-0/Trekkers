@@ -4,14 +4,14 @@ import 'package:trekkers_project/screens/screens.dart';
 class AppRouter{
   static Route onGenerateRoute(RouteSettings settings){
     switch(settings.name){
-      case '/':
-          return DashboardScreen.route();
+      case WelcomeScreen.routeName:
+          return WelcomeScreen.route();
       case DashboardScreen.routeName:
           return DashboardScreen.route();
       case HomeScreen.routeName:
       return HomeScreen.route();
-      case SignupScreen.routeName:
-        return SignupScreen.route();
+      case SignUpScreen.routeName:
+        return SignUpScreen.route();
       case LoginScreen.routeName:
       return LoginScreen.route();
       case GuideScreen.routeName:
@@ -26,6 +26,12 @@ class AppRouter{
       return SettingScreen.route();
       case ProfileScreen.routeName:
       return ProfileScreen.route();
+      case ProfileAccountScreen.routeName:
+      return ProfileAccountScreen.route();
+      case EventScreen.routeName:
+      return EventScreen.route();
+      case EventDetails.routeName:
+      return EventDetails.route();
       default:
       return _errorRoute();
 
