@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trekkers_project/screens/dashboard/order/order_screen.dart';
 import 'package:trekkers_project/screens/screens.dart';
 
 class AppRouter{
@@ -9,32 +10,31 @@ class AppRouter{
       case DashboardScreen.routeName:
           return DashboardScreen.route();
       case HomeScreen.routeName:
-      return HomeScreen.route();
+          return HomeScreen.route();
       case SignUpScreen.routeName:
-        return SignUpScreen.route();
+          return SignUpScreen.route();
       case LoginScreen.routeName:
-      return LoginScreen.route();
+          return LoginScreen.route();
       case GuideScreen.routeName:
-      return GuideScreen.route();
+          return GuideScreen.route();
       case PlaceScreen.routeName:
-      return PlaceScreen.route();
+          return PlaceScreen.route();
       case SearchPlaceScreen.routeName:
-      return SearchPlaceScreen.route();
+          return SearchPlaceScreen.route();
       case ShoppingScreen.routeName:
-      return ShoppingScreen.route();
+          return ShoppingScreen.route();
       case SettingScreen.routeName:
-      return SettingScreen.route();
-      case ProfileScreen.routeName:
-      return ProfileScreen.route();
+          return SettingScreen.route();
       case ProfileAccountScreen.routeName:
-      return ProfileAccountScreen.route();
+          return ProfileAccountScreen.route();
       case EventScreen.routeName:
-      return EventScreen.route();
+          return EventScreen.route();
       case EventDetails.routeName:
-      return EventDetails.route();
+          return EventDetails.route();
+      case OrderScreen.routeName:
+          return OrderScreen.route();
       default:
-      return _errorRoute();
-
+          return _errorRoute();
     }
   }
    static Route _errorRoute() {
