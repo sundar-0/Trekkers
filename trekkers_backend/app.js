@@ -2,7 +2,8 @@ var express = require('express');
 var path = require('path');
 var bodyParser=require('body-parser')
 var app = express();
-const port=5000
+require('dotenv').config()
+// const port=5000
 /*creating Api*/
 var userapi=require('./api/route/user')
 var guideapi=require('./api/route/guide')
@@ -24,6 +25,8 @@ app.use(function(req, res, next) {
     next();
 
   });
+
+
 app.use('/api/user',userapi)
 app.use('/api/guide',guideapi)
 app.use('/api/guidedocs',guidedocsapi)
@@ -31,7 +34,7 @@ app.use('/api/userpost',userpostsapi)
 app.use('/api/event',eventapi)
 app.use('/api/product',productapi)
 app.use('/api/category',categoryapi)
-app.listen(port,()=>{
-    console.log(`server is running on ${port}`);
+app.listen(process.env.PORT||8080,()=>{
+    console.log(`server is running on 5000`);
 })
 module.exports = app;

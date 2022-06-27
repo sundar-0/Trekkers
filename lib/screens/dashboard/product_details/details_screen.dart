@@ -45,7 +45,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           };
           print(widget.productId);
 
-          final response= await http.get(Uri.parse("http://10.0.2.2:5000/api/product/fetchsingleproduct/${widget.productId}"),headers: header);
+          final response= await http.get(Uri.parse("$baseUrl/product/fetchsingleproduct/${widget.productId}"),headers: header);
           if (response.statusCode == 200) {
             final data=jsonDecode(response.body.toString()); 
             final result=data["result"];

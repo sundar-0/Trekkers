@@ -6,14 +6,18 @@ import 'package:trekkers_project/data/models/signup.dart';
 import 'dart:convert';
 import 'package:trekkers_project/data/models/user.dart';
 import 'package:trekkers_project/screens/dashboard/dashboard.dart';
+
+import 'package:trekkers_project/constants/constants.dart';
+
 class AuthService{
   String? msg;
   String? token;
+  
 
   //fetch all User
   Future<List<User>> fetchUser() async {
     final response =
-        await http.get(Uri.parse('127.0.0.1:5000/api/user/fetchuser'));
+        await http.get(Uri.parse('$baseUrl/user/fetchuser'));
     if (response.statusCode == 200) {
     final result=jsonDecode(response.body) as List;     
     return result.map((user) => User.fromJson(user)).toList();
@@ -31,7 +35,7 @@ Future<Login> userLogin(String email,String password) async{
       'Content-Type': 'application/json; charset=UTF-8',
     };
   
-    final response= await http.post(Uri.parse('http://10.0.2.2:5000/api/user/login'),headers: options,body: jsonEncode(data));
+    final response= await http.post(Uri.parse('$baseUrl/user/login'),headers: options,body: jsonEncode(data));
     var raw=jsonDecode(response.body.toString());
     var result= Login.fromJson(raw);
     return result;
@@ -47,7 +51,7 @@ Future<Signup> userSignUp(String email,String password,String phone) async{
     var options={
       'Content-Type': 'application/json; charset=UTF-8',
     };
-    final response= await http.post(Uri.parse('http://10.0.2.2:5000/api/user/adduser'),headers: options,body: jsonEncode(data));
+    final response= await http.post(Uri.parse('$baseUrl/user/adduser'),headers: options,body: jsonEncode(data));
     var raw=jsonDecode(response.body.toString());
     var result= Signup.fromJson(raw);
     return result;

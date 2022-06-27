@@ -1,7 +1,7 @@
 var productModule=require('../../modules/productModule')
 var bcrypt=require('bcrypt')
 var jwt=require('jsonwebtoken')
-require('dotenv').config()
+// require('dotenv').config()
 var secretKey=process.env.SECRET_KEY
 
 exports.fetchProductsByCategory=(req,res,next)=>{

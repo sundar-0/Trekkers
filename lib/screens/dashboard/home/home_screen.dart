@@ -242,7 +242,7 @@ class _PostSectionState extends State<PostSection> {
   var header={
     "Authorization":"Bearer ${widget.token}"
   };
-  final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/userpost/getAllPost"),headers: header);
+  final response=await http.get(Uri.parse("$baseUrl/userpost/getAllPost"),headers: header);
   print(response.statusCode);
    if (response.statusCode == 200) {
     final data=jsonDecode(response.body.toString()); 

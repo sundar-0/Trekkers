@@ -1,5 +1,5 @@
 var mongoose=require('mongoose')
-require('dotenv').config()
+require('dotenv').config()||"mongodb+srv://sundar12:776WKX4P5q0KsI0E@cluster0.wdu8u.mongodb.net/Trekkers?retryWrites=true&w=majority"
 var dburl=process.env.MONGO_DB_URL
 mongoose.connect(dburl,{useNewUrlParser:true,useCreateIndex:true, useUnifiedTopology: true })
 var conn=mongoose.Collection;

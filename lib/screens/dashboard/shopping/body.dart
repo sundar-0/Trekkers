@@ -41,7 +41,7 @@ class _BodyState extends State<Body> {
           var header={
             "Authorization":"Bearer $token"
           };
-          final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/product/fetchproduct/$cat_id"),headers: header);
+          final response=await http.get(Uri.parse("$baseUrl/product/fetchproduct/$cat_id"),headers: header);
           print(response.statusCode);
           if (response.statusCode == 200) {
             final data=jsonDecode(response.body.toString()); 

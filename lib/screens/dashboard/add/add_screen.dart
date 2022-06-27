@@ -93,7 +93,7 @@ class _AddScreenState extends State<AddScreen> {
     print("Add new post");
     // http://localhost:5000/api/userpost/62a897b79985bb17f8cd6be6/createpost
 
-    var postUri = Uri.parse("http://10.0.2.2:5000/api/userpost/62a897b79985bb17f8cd6be6/createpost");
+    var postUri = Uri.parse("$baseUrl/userpost/62a897b79985bb17f8cd6be6/createpost");
     var request = http.MultipartRequest("POST", postUri);
 
     //yedi post ra media duitai xa rey

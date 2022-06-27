@@ -79,7 +79,7 @@ class _CategoriesState extends State<Categories> {
           var header={
             "Authorization":"Bearer $token"
           };
-          final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/category/fetchcategory"),headers: header);
+          final response=await http.get(Uri.parse("$baseUrl/category/fetchcategory"),headers: header);
           print(response.statusCode);
           if (response.statusCode == 200) {
             final data=jsonDecode(response.body.toString()); 

@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:trekkers_project/constants/constants.dart';
 import 'package:trekkers_project/controllers/auth_controller.dart';
+import 'package:trekkers_project/screens/dashboard/event/event_details_screen.dart';
 class EventScreen extends StatefulWidget {
   static const String routeName = '/event';
     static Route route() {
@@ -153,17 +154,19 @@ String getDateTime() {
         "eventDate":dateTime.split(" ")[0],
         "eventTime":dateTime.split(" ")[1]+" "+dateTime.split(" ")[2],
         "placesGoing":selectedLocations,
+        "estimatedDay":2
     };
     var options={
       'Content-Type': 'application/json; charset=UTF-8',
        "Authorization":"Bearer $token"
     };
 
-    final response= await http.post(Uri.parse('http://10.0.2.2:5000/api/event/addevent'),headers: options,body: jsonEncode(data));
+    final response= await http.post(Uri.parse('$baseUrl/event/addevent'),headers: options,body: jsonEncode(data));
  
 
   if (response.statusCode == 200) {
     print('created');
+    Navigator.of(context).pushNamed(EventDetails.routeName);
   }
   else{
     print("error");

@@ -29,3 +29,5 @@ String decodeToken(String token,SecretKey secretKey){
      return ex.message;
     }
   }
+
+  const baseUrl="http://trekkersapi.herokuapp.com/api";

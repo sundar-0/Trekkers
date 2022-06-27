@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:trekkers_project/constants/constants.dart';
 import 'package:trekkers_project/controllers/auth_controller.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -75,7 +76,7 @@ initState()  {
     print(widget.userId);
     print(loginToken);
 
-    var postUri = Uri.parse("http://10.0.2.2:5000/api/user/${widget.userId}/uploadimage");
+    var postUri = Uri.parse("$baseUrl/user/${widget.userId}/uploadimage");
     var request = http.MultipartRequest("POST", postUri);
     if(image!=null){
     request.files.add(
@@ -100,7 +101,7 @@ initState()  {
   }
 
 Future fetchProfileImage() async{
-    final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/user/${widget.userId}/fetchimage"));
+    final response=await http.get(Uri.parse("$baseUrl/user/${widget.userId}/fetchimage"));
     if (response.statusCode == 200) {
     final data=jsonDecode(response.body.toString());    
     print(data); 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:trekkers_project/constants/constants.dart';
 
 import 'package:trekkers_project/controllers/auth_controller.dart';
 class EventDetails extends StatefulWidget {
@@ -56,7 +57,7 @@ Future fetcheventDetails() async{
   var header={
     "Authorization":"Bearer $token"
   };
- final response=await http.get(Uri.parse("http://10.0.2.2:5000/api/event/fetchevent"),headers: header);
+ final response=await http.get(Uri.parse("$baseUrl/event/fetchevent"),headers: header);
 
   if (response.statusCode == 200) {
     final data=jsonDecode(response.body.toString()); 
