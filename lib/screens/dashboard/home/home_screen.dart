@@ -5,6 +5,7 @@ import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:trekkers_project/screens/dashboard/add/add_screen.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       final PlaceController placeController=Get.put(PlaceController());
       setState(() {
-      token=authController.login.value.token!;
+      token=authController.token.value;
       }); 
     return Scaffold(
       appBar: AppBar(
@@ -51,8 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Container(
           child: Column(children: <Widget>[
-            StorySection(),
             RecommendedPlaceSection(),
+            SizedBox(height: 30,),
+            AddScreen(),
+
             PostSection(token: token,),
            
            
@@ -247,7 +250,7 @@ class _PostSectionState extends State<PostSection> {
    if (response.statusCode == 200) {
     final data=jsonDecode(response.body.toString()); 
     print(data);
-    print(data);  
+    print(data);   
     final result=data["result"];
     setState(()  {
       posts= result;

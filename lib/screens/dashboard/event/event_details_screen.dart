@@ -30,7 +30,7 @@ class _EventDetailsState extends State<EventDetails> {
   void initState() {
     super.initState();
     setState(() {
-      token=authController.login.value.token;
+      token=authController.token.value;
     });
     fetcheventDetails();
   }

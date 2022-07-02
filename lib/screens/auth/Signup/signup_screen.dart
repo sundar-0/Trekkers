@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trekkers_project/constants/constants.dart';
 import 'package:trekkers_project/controllers/auth_controller.dart';
+import 'package:trekkers_project/controllers/user_controller.dart';
 import 'package:trekkers_project/data/services/auth.dart';
+import 'package:trekkers_project/data/services/user.dart';
 import 'package:trekkers_project/screens/auth/Signup/components/body/body.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -25,19 +27,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String phone="";
   String? msg;
   final AuthService _authService=AuthService();
+ 
   bool isLoading=false;
+
+@override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _userService.addUser(email, password, phone);
+  // }
 
    @override
   Widget build(BuildContext context) {
     final AuthController authController=Get.find();
+
+
     return Scaffold(
       appBar: AppBar(
       elevation: 0,
       title: const Text('Signup',style: TextStyle(color: Colors.teal,fontSize: 25,fontWeight: FontWeight.w800)),
 
       ),
-      body: Obx(
-        ()=> Container(
+      body: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -105,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             });
                             // await  _authService.userSignUp(email, password,phone);
                             // msg=_authService.msg; 
-                            await authController.signupUser(email,password,phone);
+                            await authController.signUpUser(email,password,phone);
                             setState((){isLoading=false; });                       
                         }
                       }     
@@ -114,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   isLoading?CircularProgressIndicator():Text(""),
-                  authController.signup.value.message==null?Text(""):Text(authController.signup.value.message!,style: TextStyle(backgroundColor: Colors.green[400]),),
+                  authController.msg==null?Text("Registration Failed"):Text(authController.msg,style: TextStyle(backgroundColor: Colors.green[400]),),
                   SizedBox(height: 10,),
                   SizedBox(height: 30,child: Text("Already Have Account?"),), 
                   RaisedButton(onPressed: (){
@@ -127,8 +138,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           )
         ),
-      )
-    );
+      );
+    
   }
 }
 

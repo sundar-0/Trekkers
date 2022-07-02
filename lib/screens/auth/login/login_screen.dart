@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:trekkers_project/constants/constants.dart';
 import 'package:trekkers_project/controllers/auth_controller.dart';
+import 'package:trekkers_project/controllers/user_controller.dart';
 import 'package:trekkers_project/data/models/user.dart';
 import 'package:trekkers_project/data/services/auth.dart';
 import 'package:trekkers_project/screens/dashboard/dashboard.dart';
@@ -35,9 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
       title: const Text('Login',style: TextStyle(color: Colors.teal,fontSize: 25,fontWeight: FontWeight.w800)),
 
       ),
-      body: Obx(
-        () {
-          return Container(
+      body:
+           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                               await authController.loginUser(email, password);
                               
-                              if(authController.login.value.token!=null){
+                              if(authController.token.value!=""){
                                 Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context)=>DashboardScreen()),(route) => false);
                               }
                               setState((){isLoading=false; });                       
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     isLoading?CircularProgressIndicator():Text(""),
-                    authController.login.value.token==null?Text(authController.login.value.message??""):Text(""),
+                   
                     SizedBox(height: 30,child: Text("Don't Have Account?"),), 
                     RaisedButton(onPressed: (){
                       Navigator.of(context).pushNamed('/signup');
@@ -113,10 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
     ),
               ],
             )
-          );
-        }
-      )
+          )
     );
+      
+    
   }
 
 

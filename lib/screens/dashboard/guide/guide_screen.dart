@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:trekkers_project/controllers/guide_controller.dart';
 class GuideScreen extends StatelessWidget {
@@ -17,15 +16,7 @@ class GuideScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
       elevation: 0,
-       leading: IconButton(
-      icon: SvgPicture.asset(
-          'assets/icons/back.svg',
-          color: Colors.black,
-        ),
-        onPressed: () => Navigator.pop(context),
-      ),
-      title: const Text('Choose Guide',style: TextStyle(color: Colors.teal,fontSize: 25,fontWeight: FontWeight.w800)),
-
+      title: Text('Choose Guide',style: TextStyle(color: Colors.teal,fontSize: 25,fontWeight: FontWeight.w800)),
       ),
       body: Obx(() {
           return SafeArea(

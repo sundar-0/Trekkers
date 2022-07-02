@@ -25,7 +25,7 @@ class _BodyState extends State<Body> {
   void initState() {
     super.initState();
     setState(() {
-      token=authController.login.value.token;
+      token=authController.token.value;
     });
     fetchProductsByCategory();
   }

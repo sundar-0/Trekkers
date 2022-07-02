@@ -34,7 +34,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   void initState() {
     super.initState();
     setState(() {
-      token=authController.login.value.token;
+      token=authController.token.value;
 
     });
     fetchSingleProduct();

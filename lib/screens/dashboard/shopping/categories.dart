@@ -23,7 +23,7 @@ class _CategoriesState extends State<Categories> {
   void initState() {
     super.initState();
     setState(() {
-      token=authController.login.value.token;
+      token=authController.token.value;
     });
     fetchAllCategories();
   }   

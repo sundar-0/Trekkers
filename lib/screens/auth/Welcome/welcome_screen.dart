@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:trekkers_project/controllers/auth_controller.dart';
+import 'package:trekkers_project/screens/dashboard/dashboard.dart';
 import 'components/body/body.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -15,8 +16,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final AuthController authController=Get.put(AuthController());
-    return const Scaffold(
+    final AuthController authController=Get.put(AuthController());
+    return 
+     const Scaffold(
       body: Body(),
     );
   }

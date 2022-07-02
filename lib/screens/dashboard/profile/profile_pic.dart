@@ -105,11 +105,13 @@ Future fetchProfileImage() async{
     if (response.statusCode == 200) {
     final data=jsonDecode(response.body.toString());    
     print(data); 
-    setState(()  {
+    if( data["result"][0]["user_profile_url"]!=null) {
+      setState(()  {
       imgUrl=  data["result"][0]["user_profile_url"];
     });
-    print(imgUrl);
-  
+    } else {
+      imgUrl=null;
+    }
     } else {
      imgUrl=null;
     }
@@ -120,7 +122,7 @@ Future fetchProfileImage() async{
  @override
   Widget build(BuildContext context) {
     final AuthController authController=Get.find();
-    final token=authController.login.value.token;
+    final token=authController.token.value;
     setState(() {
     loginToken=token;
     });

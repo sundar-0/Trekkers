@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:chewie/chewie.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -88,12 +90,11 @@ class _AddScreenState extends State<AddScreen> {
     }
   }
   
-
-  Future addPost() async{
-    print("Add new post");
+    Future addPost() async{
+    String uid=decodeToken(loginToken!, SecretKey('secret'));
     // http://localhost:5000/api/userpost/62a897b79985bb17f8cd6be6/createpost
 
-    var postUri = Uri.parse("$baseUrl/userpost/62a897b79985bb17f8cd6be6/createpost");
+    var postUri = Uri.parse("$baseUrl/userpost/$uid/createpost");
     var request = http.MultipartRequest("POST", postUri);
 
     //yedi post ra media duitai xa rey
@@ -146,7 +147,13 @@ class _AddScreenState extends State<AddScreen> {
     request.headers["Authorization"]="Bearer $loginToken";
     request.send().then((response) async {
       if (response.statusCode == 200){
-        Navigator.of(context).pushNamed('/home');
+        print('created');
+
+        setState(() {
+        fileMediaArray=[];
+        post="";
+        });
+        
       
           //to do fetch user profile image
       }
@@ -176,93 +183,92 @@ class _AddScreenState extends State<AddScreen> {
   Widget build(BuildContext context) {
     print(fileMediaArray);
     final AuthController authController=Get.find();
-    final token=authController.login.value.token;
+    final token=authController.token.value;
     setState(() {
     loginToken=token;
     });
   
-    return Scaffold(
-      appBar: AppBar(
-      elevation: 0,
-      title: const Text('Add',style: TextStyle(color: Colors.teal,fontSize: 25,fontWeight: FontWeight.w800)),
-
-      ),
-      body: Column(
-        children: [
-        TextFormField(
-               decoration: inputDecoration.copyWith(
-               hintText: "Write Something"),
-               maxLines: 5,      
-              onChanged: (value) {
-                    setState(() {
-                        post = value;
-                        });
-                    },           
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return    Container(
+      height: fileMediaArray.isEmpty?MediaQuery.of(context).size.height/2: MediaQuery.of(context).size.height,
+      child: Column(
           children: [
-         IconButton(onPressed: () async{
-          await pickImageC();
-         }, icon: Icon(Icons.camera_alt),iconSize: 26,),
-         IconButton(onPressed: () async{
-          await pickImage();
-         }, icon: Icon(Icons.image_outlined,),iconSize: 26,),
-         IconButton(onPressed: () async{
-          await pickVideo();
-         }, icon: Icon(Icons.video_call_sharp),iconSize: 26,)  
+          TextFormField(
+                 decoration: inputDecoration.copyWith(
+                 hintText: "Write Something"),
+                 maxLines: 8,      
+                onChanged: (value) {
+                      setState(() {
+                          post = value;
+                          });
+                      },           
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+           IconButton(onPressed: () async{
+            await pickImageC();
+           }, icon: Icon(Icons.camera_alt),iconSize: 26,),
+           IconButton(onPressed: () async{
+            await pickImage();
+           }, icon: Icon(Icons.image_outlined,),iconSize: 26,),
+           IconButton(onPressed: () async{
+            await pickVideo();
+           }, icon: Icon(Icons.video_call_sharp),iconSize: 26,)  
+            ],
+          ),
+          RaisedButton(
+            color: Colors.teal[500],
+            onPressed: () async{    
+            await addPost();
+          }, child:Text("Post")),
+            SizedBox(height: 10,),
+            fileMediaArray.length!=0?Container(
+              height: MediaQuery.of(context).size.height/2,
+              decoration: BoxDecoration(
+       
+               borderRadius: BorderRadius.circular(5),
+              ),
+              child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(  
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 0.8,
+                  crossAxisSpacing: 4,
+                  mainAxisExtent: 180,
+                  ),
+              itemCount: fileMediaArray.length,
+              itemBuilder: (BuildContext ctx, index) {
+                String mediaType=lookupMimeType(fileMediaArray[index].path)!.split("/")[0];
+                return mediaType=="image"?
+                SizedBox(
+                  child: Image.file(fileMediaArray[index]),
+                  )
+               :
+               SizedBox(  
+                 child: Chewie(controller: ChewieController(
+                  videoPlayerController:_videoPlayerController!,
+                  )),
+               );
+              //  _videoPlayerController!.value.isInitialized?AspectRatio(
+              //         aspectRatio: _videoPlayerController!.value.aspectRatio,
+              //         child: VideoPlayer(_videoPlayerController!),
+              //     ):Container();
+              // SizedBox(
+              //   width: 20,
+              //   height: 20,
+              //   child: Chewie(
+              //   controller: ChewieController(
+              //   videoPlayerController: VideoPlayerController.asset(
+              //   fileMediaArray[index].path,
+              //             ),
+              //             ),  
+              //             ),
+              // );
+              }),
+            ):Text("No image selected"),
+            // image != null ? SizedBox(child: Image.file(image!),height: MediaQuery.of(context).size.height/4,): Text("No image selected")
           ],
-        ),
-        TextButton(onPressed: () async{
-          await addPost();
-        }, child:Text("Post") ),
-          SizedBox(height: 20,),
-          fileMediaArray.length!=0?Container(
-            height: 200,
-            decoration: BoxDecoration(
-            color:Colors.grey ,
-             borderRadius: BorderRadius.circular(5),
-            ),
-            child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(  
-                maxCrossAxisExtent: 210,
-                childAspectRatio: 3/ 2,
-                crossAxisSpacing: 4,
-                mainAxisExtent: 180,
-                ),
-            itemCount: fileMediaArray.length,
-            itemBuilder: (BuildContext ctx, index) {
-              String mediaType=lookupMimeType(fileMediaArray[index].path)!.split("/")[0];
-              return mediaType=="image"?
-              SizedBox(
-                child: Image.file(fileMediaArray[index]),
-                )
-             :
-             SizedBox(  
-               child: Chewie(controller: ChewieController(
-                videoPlayerController:_videoPlayerController!,
-                )),
-             );
-            //  _videoPlayerController!.value.isInitialized?AspectRatio(
-            //         aspectRatio: _videoPlayerController!.value.aspectRatio,
-            //         child: VideoPlayer(_videoPlayerController!),
-            //     ):Container();
-            // SizedBox(
-            //   width: 20,
-            //   height: 20,
-            //   child: Chewie(
-            //   controller: ChewieController(
-            //   videoPlayerController: VideoPlayerController.asset(
-            //   fileMediaArray[index].path,
-            //             ),
-            //             ),  
-            //             ),
-            // );
-            }),
-          ):Text("No image selected"),
-          // image != null ? SizedBox(child: Image.file(image!),height: MediaQuery.of(context).size.height/4,): Text("No image selected")
-        ],
-      )
+        
+      ),
     );
   }
 }

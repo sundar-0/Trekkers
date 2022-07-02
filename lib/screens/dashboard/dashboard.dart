@@ -25,7 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   HomeScreen(),
   PlaceScreen(),
   EventScreen(),
-  AddScreen(),
+  GuideScreen(),
   ShoppingScreen(),
   ProfileScreen(),
   ];
@@ -58,8 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             label: "Event ",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box),
-            label: "",
+            icon: Icon(Icons.people_alt),
+            label: "Guide",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),

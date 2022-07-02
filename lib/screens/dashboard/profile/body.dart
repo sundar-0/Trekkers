@@ -33,7 +33,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) { 
     final AuthController _authController=Get.find();
-    decodeToken(_authController.login.value.token!, SecretKey('secret'));
+    decodeToken(_authController.token.value, SecretKey('secret'));
     return  SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
